@@ -20,7 +20,7 @@ export default {
 } as Meta;
 
 const Template: StoryFn<InputFieldProps> = (args) => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(args.value || '');
   return (
     <InputField
       {...args}
@@ -52,12 +52,19 @@ ErrorState.args = {
   errorMessage: 'This field is required',
 };
 
-export const Disabled = Template.bind({});
+// For disabled state, we need a different approach
+const DisabledTemplate: StoryFn<InputFieldProps> = (args) => {
+  // For disabled inputs, we can use defaultValue instead of value
+  return <InputField {...args} />;
+};
+
+export const Disabled = DisabledTemplate.bind({});
 Disabled.args = {
   label: 'Disabled Input',
   placeholder: 'Cannot type here',
   disabled: true,
   value: 'Disabled value',
+  readOnly: true, // Add readOnly to prevent the warning
 };
 
 export const Loading = Template.bind({});

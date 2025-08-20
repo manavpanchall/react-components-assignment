@@ -89,7 +89,7 @@ const columns: Column<User>[] = [
     title: 'Status',
     dataIndex: 'status',
     sortable: true,
-    render: (value) => (
+    render: (value: any) => (
       <span
         className={`px-2 py-1 text-xs rounded-full ${
           value === 'active'
@@ -169,7 +169,7 @@ const customColumns: Column<User>[] = [
     title: 'Actions',
     dataIndex: 'id',
     sortable: false,
-    render: (value, record) => (
+    render: (value: any, record: User) => (
       <button className="px-3 py-1 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 rounded text-sm hover:bg-blue-200 dark:hover:bg-blue-900/50">
         Edit
       </button>

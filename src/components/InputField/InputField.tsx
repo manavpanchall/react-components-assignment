@@ -17,6 +17,7 @@ const InputField: React.FC<InputFieldProps> = ({
   clearable = false,
   type = 'text',
   onClear,
+  readOnly = false,
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -46,7 +47,11 @@ const InputField: React.FC<InputFieldProps> = ({
     ${variantClasses[variant]}
     ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
     ${invalid ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''}
+    ${readOnly ? 'cursor-default' : ''}
   `;
+
+  // Determine if we should show the clear button
+  const shouldShowClear = clearable && value && !disabled && !loading && !readOnly;
 
   return (
     <div className="w-full">
@@ -66,13 +71,14 @@ const InputField: React.FC<InputFieldProps> = ({
           onChange={onChange}
           placeholder={placeholder}
           disabled={disabled || loading}
+          readOnly={readOnly}
           className={inputBaseClasses}
           aria-invalid={invalid}
           aria-describedby={helperText || errorMessage ? `${label}-help` : undefined}
           {...props}
         />
         
-        {(clearable && value && !disabled && !loading) && (
+        {shouldShowClear && (
           <button
             type="button"
             onClick={handleClear}
@@ -83,7 +89,7 @@ const InputField: React.FC<InputFieldProps> = ({
           </button>
         )}
         
-        {isPassword && !disabled && (
+        {isPassword && !disabled && !readOnly && (
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}

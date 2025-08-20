@@ -15,6 +15,7 @@ interface ExampleData {
 function App() {
   const { theme, toggleTheme } = useTheme();
   const [inputValue, setInputValue] = useState('');
+  const [passwordValue, setPasswordValue] = useState('');
   const [selectedRows, setSelectedRows] = useState<ExampleData[]>([]);
 
   const exampleData: ExampleData[] = [
@@ -61,6 +62,8 @@ function App() {
                 label="Password Input"
                 type="password"
                 placeholder="Enter your password"
+                value={passwordValue}
+                onChange={(e) => setPasswordValue(e.target.value)}
                 helperText="Must be at least 8 characters"
               />
             </div>
@@ -70,6 +73,8 @@ function App() {
                 placeholder="This field has an error"
                 invalid
                 errorMessage="This field is required"
+                value=""
+                onChange={() => {}} // Add empty handler to avoid warning
               />
             </div>
             <div>
@@ -78,6 +83,7 @@ function App() {
                 placeholder="Cannot type here"
                 value="Disabled value"
                 disabled
+                readOnly // Add readOnly to prevent warning
               />
             </div>
           </div>

@@ -13,6 +13,7 @@ export interface InputFieldProps {
   clearable?: boolean;
   type?: string;
   onClear?: () => void;
+  readOnly?: boolean;
 }
 
 export interface Column<T> {

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { ChevronUp, ChevronDown, Loader2, AlertCircle, Check } from 'lucide-react';
+import { ChevronUp, ChevronDown, Loader2, AlertCircle } from 'lucide-react';
 import { DataTableProps, Column } from '../../types';
 
 const DataTable = <T extends Record<string, any>>({
@@ -123,7 +123,7 @@ const DataTable = <T extends Record<string, any>>({
                 )}
               </th>
             )}
-            {columns.map((column) => (
+            {columns.map((column: Column<T>) => (
               <th
                 key={column.key}
                 className={`px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider ${
@@ -154,7 +154,7 @@ const DataTable = <T extends Record<string, any>>({
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-          {sortedData.map((row, index) => (
+          {sortedData.map((row: T, index: number) => (
             <tr
               key={index}
               className={`${
@@ -179,7 +179,7 @@ const DataTable = <T extends Record<string, any>>({
                   </div>
                 </td>
               )}
-              {columns.map((column) => (
+              {columns.map((column: Column<T>) => (
                 <td key={column.key} className="px-4 py-3 whitespace-nowrap">
                   {column.render
                     ? column.render(row[column.dataIndex], row)
