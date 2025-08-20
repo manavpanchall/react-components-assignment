@@ -34,21 +34,24 @@ const InputField: React.FC<InputFieldProps> = ({
   };
 
   const variantClasses = {
-    filled: 'bg-gray-100 dark:bg-gray-700 border-transparent focus:bg-white dark:focus:bg-gray-600',
-    outlined: 'bg-transparent border-gray-300 dark:border-gray-600 focus:border-blue-500',
-    ghost: 'bg-transparent border-transparent border-b-gray-300 dark:border-b-gray-600 focus:border-b-blue-500',
+  filled: 'bg-gray-100 dark:bg-gray-700 border-transparent focus:bg-white dark:focus:bg-gray-600 shadow-inner',
+  outlined: 'bg-transparent border-gray-300 dark:border-gray-600 focus:border-blue-500 shadow-sm',
+  ghost: 'bg-transparent border-transparent border-b-2 border-gray-300 dark:border-gray-600 focus:border-b-blue-500 rounded-none',
   };
 
   const inputBaseClasses = `
-    w-full rounded-md border
-    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50
-    transition-all duration-200
-    ${inputSizeClasses[size]}
-    ${variantClasses[variant]}
-    ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
-    ${invalid ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''}
-    ${readOnly ? 'cursor-default' : ''}
-  `;
+  w-full rounded-xl border-2
+  focus:outline-none focus:ring-4 focus:ring-opacity-20
+  transition-all duration-300
+  ${inputSizeClasses[size]}
+  ${variantClasses[variant]}
+  ${disabled ? 'opacity-60 cursor-not-allowed' : 'hover:border-opacity-70'}
+  ${invalid 
+    ? 'border-red-500 focus:border-red-500 focus:ring-red-500' 
+    : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500'
+  }
+  ${readOnly ? 'cursor-default bg-gray-50 dark:bg-gray-700' : ''}
+`;
 
   // Determine if we should show the clear button
   const shouldShowClear = clearable && value && !disabled && !loading && !readOnly;

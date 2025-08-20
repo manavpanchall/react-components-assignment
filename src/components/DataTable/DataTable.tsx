@@ -18,11 +18,11 @@ const DataTable = <T extends Record<string, any>>({
 
   const sortedData = useMemo(() => {
     if (!sortConfig) return data;
-    
+
     return [...data].sort((a, b) => {
       const aValue = a[sortConfig.key as keyof T];
       const bValue = b[sortConfig.key as keyof T];
-      
+
       if (aValue < bValue) {
         return sortConfig.direction === 'ascending' ? -1 : 1;
       }
@@ -35,7 +35,7 @@ const DataTable = <T extends Record<string, any>>({
 
   const handleSort = (key: string, sortable?: boolean) => {
     if (!sortable) return;
-    
+
     let direction: 'ascending' | 'descending' = 'ascending';
     if (sortConfig && sortConfig.key === key && sortConfig.direction === 'ascending') {
       direction = 'descending';
@@ -45,7 +45,7 @@ const DataTable = <T extends Record<string, any>>({
 
   const handleRowSelect = (row: T) => {
     if (!selectable) return;
-    
+
     let newSelectedRows: T[];
     if (selectable === 'single') {
       newSelectedRows = [row];
@@ -53,7 +53,7 @@ const DataTable = <T extends Record<string, any>>({
       const isSelected = selectedRows.some(
         (selectedRow) => selectedRow[rowKey] === row[rowKey]
       );
-      
+
       if (isSelected) {
         newSelectedRows = selectedRows.filter(
           (selectedRow) => selectedRow[rowKey] !== row[rowKey]
@@ -62,17 +62,17 @@ const DataTable = <T extends Record<string, any>>({
         newSelectedRows = [...selectedRows, row];
       }
     }
-    
+
     setSelectedRows(newSelectedRows);
     if (onRowSelect) onRowSelect(newSelectedRows);
   };
 
   const handleSelectAll = () => {
     if (selectable !== 'multiple') return;
-    
+
     const allSelected = selectedRows.length === data.length;
     const newSelectedRows = allSelected ? [] : [...data];
-    
+
     setSelectedRows(newSelectedRows);
     if (onRowSelect) onRowSelect(newSelectedRows);
   };
@@ -105,19 +105,19 @@ const DataTable = <T extends Record<string, any>>({
   }
 
   return (
-    <div className="w-full overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">
+    <div className="w-full overflow-x-auto bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700">
       <table className="w-full">
         <thead>
-          <tr className="border-b border-gray-200 dark:border-gray-700">
+          <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
             {selectable && (
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                 {selectable === 'multiple' && (
                   <div className="flex items-center">
                     <input
                       type="checkbox"
                       checked={isAllSelected}
                       onChange={handleSelectAll}
-                      className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                      className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500 transition-colors"
                     />
                   </div>
                 )}
@@ -126,23 +126,22 @@ const DataTable = <T extends Record<string, any>>({
             {columns.map((column: Column<T>) => (
               <th
                 key={column.key}
-                className={`px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider ${
-                  column.sortable ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700' : ''
-                }`}
+                className={`px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider ${column.sortable ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors' : ''
+                  }`}
                 onClick={() => handleSort(column.key, column.sortable)}
               >
                 <div className="flex items-center">
                   {column.title}
                   {column.sortable && (
-                    <span className="ml-1">
+                    <span className="ml-2">
                       {sortConfig && sortConfig.key === column.key ? (
                         sortConfig.direction === 'ascending' ? (
-                          <ChevronUp size={16} />
+                          <ChevronUp size={16} className="text-blue-500" />
                         ) : (
-                          <ChevronDown size={16} />
+                          <ChevronDown size={16} className="text-blue-500" />
                         )
                       ) : (
-                        <div className="opacity-0 group-hover:opacity-100">
+                        <div className="opacity-40">
                           <ChevronUp size={16} />
                         </div>
                       )}
@@ -153,18 +152,17 @@ const DataTable = <T extends Record<string, any>>({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+        <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
           {sortedData.map((row: T, index: number) => (
             <tr
               key={index}
-              className={`${
-                isRowSelected(row)
-                  ? 'bg-blue-50 dark:bg-blue-900/20'
-                  : 'hover:bg-gray-50 dark:hover:bg-gray-700/50'
-              } transition-colors duration-150`}
+              className={`transition-all duration-200 ${isRowSelected(row)
+                  ? 'bg-blue-50 dark:bg-blue-900/20 border-l-4 border-l-blue-500'
+                  : 'hover:bg-gray-50 dark:hover:bg-gray-700/30 even:bg-gray-50/50 dark:even:bg-gray-800/20'
+                }`}
             >
               {selectable && (
-                <td className="px-4 py-3 whitespace-nowrap">
+                <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <input
                       type={selectable === 'single' ? 'radio' : 'checkbox'}
@@ -172,15 +170,15 @@ const DataTable = <T extends Record<string, any>>({
                       onChange={() => handleRowSelect(row)}
                       className={
                         selectable === 'single'
-                          ? 'h-4 w-4 text-blue-600 focus:ring-blue-500'
-                          : 'h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500'
+                          ? 'h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 transition-colors'
+                          : 'h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500 transition-colors'
                       }
                     />
                   </div>
                 </td>
               )}
               {columns.map((column: Column<T>) => (
-                <td key={column.key} className="px-4 py-3 whitespace-nowrap">
+                <td key={column.key} className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                   {column.render
                     ? column.render(row[column.dataIndex], row)
                     : row[column.dataIndex]}
